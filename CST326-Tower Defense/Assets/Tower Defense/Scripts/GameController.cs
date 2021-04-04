@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class GameController : MonoBehaviour
 {
-    public Enemy enemyScript;
+    public OldEnemy enemyScript;
     [SerializeField] private Text coinCount;
     public float totalMoney;
 
@@ -28,11 +28,11 @@ public class GameController : MonoBehaviour
                 {
                     if (BC.gameObject.name == "BigBadGuy")
                     {
-                        enemyScript.GetComponent<Enemy>().DamageEnemy(BC.gameObject.name);
+                        enemyScript.GetComponent<OldEnemy>().DamageEnemy(BC.gameObject.name);
                     }
                     if (BC.gameObject.name == "SmallBadGuy")
                     {
-                        enemyScript.GetComponent<Enemy>().DamageEnemy(BC.gameObject.name);
+                        enemyScript.GetComponent<OldEnemy>().DamageEnemy(BC.gameObject.name);
                     }
 
                 }
