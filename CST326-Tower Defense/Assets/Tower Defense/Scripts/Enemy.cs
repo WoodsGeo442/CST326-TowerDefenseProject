@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Transactions;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Events;
 
 public class Enemy : MonoBehaviour
 {
@@ -19,10 +20,12 @@ public class Enemy : MonoBehaviour
 
   public Transform healthBar;
 
+  public UnityEvent DeathEvent;
+
   void Start()
   {
     healthPerUnit = 100f / health;
-    
+
     myPathThroughLife = route.path;
     transform.position = myPathThroughLife[index].transform.position;
     Recalculate();
@@ -58,13 +61,15 @@ public class Enemy : MonoBehaviour
     }
   }
 
-  public void Damage()
+  public void Damage(float damageAmount)
   {
-    health -= 20;
+    health -= damageAmount;
     if (health <= 0)
     {
         towerScript.GetComponent<PlaceTower9001>().GimmeMyMoney(this.GetComponent<Enemy>().coinWorth);
         Debug.Log($"{this.coinWorth} is Dead");
+        DeathEvent.Invoke();
+        DeathEvent.RemoveAllListeners();
         Destroy(this.gameObject);
     }
 
