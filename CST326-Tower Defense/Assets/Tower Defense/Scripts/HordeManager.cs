@@ -9,11 +9,19 @@ public class HordeManager : MonoBehaviour
 
   public Wave enemyWave;
   public PlaceTower9001 towerS;
+  public HordeManager hordeS;
+  public GameController gameS;
   public Path enemyPath;
-  private int enemyCount;
+  public int enemyCount = 0;
+
+  public AudioSource audioSource;
+
+  public AudioClip deathSound;
+
+  public float volume = 0.5f;
 
 
-  IEnumerator Start()
+    IEnumerator Start()
   {
 
     Debug.Log("before spawn small");
@@ -24,20 +32,30 @@ public class HordeManager : MonoBehaviour
 
   }
 
-  //pick our enemy to spawn
-  //spawn it
-  //wait
-  IEnumerator SpawnSmallEnemies()
+    public void Update()
+    {
+        if (enemyCount == 0)
+        {
+            gameS.GetComponent<GameController>().ShowRestart();
+        }
+    }
+
+    //pick our enemy to spawn
+    //spawn it
+    //wait
+    IEnumerator SpawnSmallEnemies()
   {
     for (int i = 0; i < enemyWave.groupsOfEnemiesInWave.Length; i++)
     {
 
       for (int j = 0; j < enemyWave.groupsOfEnemiesInWave[i].numberOfSmall; j++)
       {
-        enemyCount++;
         Enemy spawnedEnemy = Instantiate(enemyWave.groupsOfEnemiesInWave[i].smallMichaelEnemy).GetComponent<Enemy>();
         spawnedEnemy.route = enemyPath;
         spawnedEnemy.towerScript = towerS;
+        spawnedEnemy.hordeScript = hordeS;
+        spawnedEnemy.gameScript = gameS;
+        enemyCount++;
         yield return new WaitForSeconds(enemyWave.groupsOfEnemiesInWave[i].coolDownBetweenSmallEnemies);
 
       }
@@ -57,10 +75,12 @@ public class HordeManager : MonoBehaviour
 
         for (int j = 0; j < enemyWave.groupsOfEnemiesInWave[i].numberOfLarge; j++)
         {
-            enemyCount++;
             Enemy spawnedEnemy = Instantiate(enemyWave.groupsOfEnemiesInWave[i].bigAwesomeSuperBadGuyClayEnemy).GetComponent<Enemy>();
             spawnedEnemy.route = enemyPath;
             spawnedEnemy.towerScript = towerS;
+            spawnedEnemy.hordeScript = hordeS;
+            spawnedEnemy.gameScript = gameS;
+            enemyCount++;
             yield return new WaitForSeconds(enemyWave.groupsOfEnemiesInWave[i].coolDownBetweenLargeEnemies);
 
         }
@@ -69,6 +89,13 @@ public class HordeManager : MonoBehaviour
     }
         //yield return null;
   }
+
+  public void RemoveEnemy()
+    {
+
+        audioSource.Play();
+        enemyCount--;
+    }
   
 }
 
