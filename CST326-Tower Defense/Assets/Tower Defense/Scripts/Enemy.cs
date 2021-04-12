@@ -10,6 +10,8 @@ public class Enemy : MonoBehaviour
   public Path route;
   private Waypoint[] myPathThroughLife;
   public PlaceTower9001 towerScript;
+  public GameController gameScript;
+  public HordeManager hordeScript;
   public int coinWorth;
   public float health = 100;
   public float speed = .25f;
@@ -58,6 +60,8 @@ public class Enemy : MonoBehaviour
     else
     {
       stop = true;
+      Time.timeScale = 0f;
+      gameScript.GetComponent<GameController>().ShowRestart();
     }
   }
 
@@ -67,6 +71,7 @@ public class Enemy : MonoBehaviour
     if (health <= 0)
     {
         towerScript.GetComponent<PlaceTower9001>().GimmeMyMoney(this.GetComponent<Enemy>().coinWorth);
+        hordeScript.GetComponent<HordeManager>().RemoveEnemy();
         Debug.Log($"{this.coinWorth} is Dead");
         DeathEvent.Invoke();
         DeathEvent.RemoveAllListeners();

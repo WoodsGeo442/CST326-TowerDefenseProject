@@ -11,6 +11,7 @@ public class Tower : MonoBehaviour
 
     private LineRenderer laser;
     public float hitAmount = 10;
+    public float towerHealth = 200;
 
     void Start()
     {
@@ -31,6 +32,10 @@ public class Tower : MonoBehaviour
         {
             laser.SetPosition(1, turret.transform.position);
         }
+        if(towerHealth <= 0)
+        {
+            Destroy(this.gameObject);
+        }
     }
 
 
@@ -42,6 +47,14 @@ public class Tower : MonoBehaviour
             newEnemy.DeathEvent.AddListener(delegate { BookKeeping(newEnemy); });
             currentEnemies.Add(newEnemy);
             if (currentTarget == null) currentTarget = newEnemy;
+        }
+    }
+
+    private void OnTriggerStay(Collider other)
+    {
+        if (other.GetComponent<Enemy>() != null)
+        {
+            towerHealth -= (currentEnemies.Count * (5 * Time.deltaTime));
         }
     }
 
